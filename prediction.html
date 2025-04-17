@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predict your disease here</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='prediction.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="logo" />
+                Predict Prevent Protect Thrive<br>MEDICO
+            </div>
+        </div>
+    </nav>
+
+    <h2>Welcome, {{ username }}!</h2>
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <div>
+        <h1 style="color: rgb(49, 155, 225)">Predict Your Disease</h1>
+
+        <!-- FORM START -->
+        <form action="/predict" method="POST" class="predict">
+            {% for i in range(1, 6) %}
+                <label for="symptom{{ i }}">Choose Symptom {{ i }}:</label>
+                <select id="symptom{{ i }}" name="symptoms">
+                    <option value="">-- select --</option>
+                    {% for symptom in [
+                        "itching", "skin_rash", "nodal_skin_eruptions", "continuous_sneezing", "shivering",
+                        "chills", "joint_pain", "stomach_pain", "acidity", "ulcers_on_tongue", "muscle_wasting" , "vomiting", "burning_micturition",
+                        "fatigue", "weight_loss", "restlessness", "headache", "nausea", "cough", "high_fever"
+                        ] %}
+                        <option value="{{ symptom }}">{{ symptom.replace('_', ' ').title() }}</option>
+                    {% endfor %}
+                </select><br>
+            {% endfor %}
+
+            <input type="submit" value="Predict" />
+        </form>
+
+        <!-- Show prediction result -->
+        {% if prediction_text %}
+            <h3 style="color: green;">{{ prediction_text }}</h3>
+        {% endif %}
+
+        <h1>Upload Previous Reports</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file">Choose Blood test file:</label>
+            <input type="file" id="file" name="file" accept=".pdf" />
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>
